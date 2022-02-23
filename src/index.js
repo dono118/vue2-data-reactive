@@ -1,9 +1,13 @@
-import defineReactive from './defineReactive'
+import observe from '@/observe'
 
-let obj = {}
+let obj = {
+  a: {
+    c: {
+      d: 1
+    }
+  },
+  b: 2
+}
 
-defineReactive(obj, 'a', 1)
-
-console.log(obj.a)
-obj.a = 2
-console.log(obj.a)
+observe(obj)
+obj.a.c.d = 3
