@@ -6,8 +6,9 @@ let obj = {
       d: 1
     }
   },
-  b: 2
+  b: 2,
+  e: [3, 4]
 }
 
 observe(obj)
-obj.a.c.d = 3
+obj.e.push(5)
