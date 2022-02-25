@@ -12,3 +12,4 @@ let obj = {
 
 observe(obj)
 obj.e.push(5)
+console.log(obj.e)

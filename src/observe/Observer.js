@@ -5,6 +5,7 @@
 import defineReactive from '@/common/defineReactive'
 import arrayMethods from '@/common/array'
 import { def } from '@/utils'
+import observe from '@/observe'
 
 export default class Observer {
   constructor(value) {
@@ -14,6 +15,8 @@ export default class Observer {
     if (Array.isArray(value)) {
       // 如果是数组，将这个数组的原型指向arrayMethods
       Object.setPrototypeOf(value, arrayMethods)
+      // 让这个数组变成可被侦测的
+      this.observeArray(value)
     } else {
       this.walk(value)
     }
@@ -22,6 +25,13 @@ export default class Observer {
   walk(value) {
     for (let k in value) {
       defineReactive(value, k)
+    }
+  }
+  // 数组的特殊遍历
+  observeArray(arr) {
+    for (let i = 0; i < arr.length; i++) {
+      // 对每个元素进行observe
+      observe(arr[i])
     }
   }
 }
