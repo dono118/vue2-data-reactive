@@ -2,6 +2,7 @@
  * 改写数组的7个方法：push,pop,shift,unshift,splice,sort,reverse
  */
 import { def } from '@/utils'
+
 const arrayPrototype = Array.prototype
 
 // 以Array.prototype为原型创建arrayMethods对象
@@ -18,6 +19,11 @@ sevenMethods.forEach(methodName => {
     arrayMethods,
     methodName,
     function () {
+      // 恢复原来的功能
+      // console.log('将要改写7个数组方法。。。')
+      const result = original.apply(this, arguments)
+      // 把类数组arguments转换为数组
+      const args = [...arguments]
       // obj.g是数组，在第一次遍历obj的时候，已经给g属性数组添加了__ob__属性
       const ob = this.__ob__
       // push,unshift,splice这三个方法会插入新项，现在要把插入的新项也要被observe
@@ -25,10 +31,10 @@ sevenMethods.forEach(methodName => {
       switch (methodName) {
         case 'push':
         case 'unshift':
-          insertedItems = arguments
+          insertedItems = args
           break
         case 'splice':
-          insertedItems = arguments.slice(2)
+          insertedItems = args.slice(2)
           break
 
         default:
@@ -38,9 +44,7 @@ sevenMethods.forEach(methodName => {
       if (insertedItems.length) {
         ob.observeArray(insertedItems)
       }
-      // 恢复原来的功能
-      // console.log('将要改写7个数组方法。。。')
-      original.apply(this, arguments)
+      return result
     },
     false
   )

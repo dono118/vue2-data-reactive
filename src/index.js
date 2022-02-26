@@ -11,5 +11,6 @@ let obj = {
 }
 
 observe(obj)
-obj.e.push(5)
+// obj.e.push(5)
+obj.e.splice(1, 1, [5, 6])
 console.log(obj.e)
