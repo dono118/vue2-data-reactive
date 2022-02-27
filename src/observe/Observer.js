@@ -6,9 +6,12 @@ import defineReactive from '@/common/defineReactive'
 import arrayMethods from '@/common/array'
 import { def } from '@/utils'
 import observe from '@/observe'
+import Dep from '@/dep'
 
 export default class Observer {
   constructor(value) {
+    // 每一个Observer的实例身上，都有一个Dep
+    this.dep = new Dep()
     def(value, '__ob__', this, false)
     // console.log('我是Observer构造函数', value)
     // 检查它是数组还是对象

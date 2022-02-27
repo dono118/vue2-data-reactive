@@ -1,6 +1,8 @@
 import observe from '@/observe'
+import Dep from '@/dep'
 
 export default function defineReactive(data, key, val) {
+  const dep = new Dep()
   if (arguments.length === 2) {
     val = data[key]
   }
@@ -12,6 +14,13 @@ export default function defineReactive(data, key, val) {
     configurable: true,
     get() {
       console.log(`您正在访问${key}属性`)
+      // 如果现在处于依赖收集阶段
+      if (Dep.target) {
+        dep.depend()
+        if (childOb) {
+          childOb.dep.depend()
+        }
+      }
       return val
     },
     set(newVal) {
@@ -20,6 +29,8 @@ export default function defineReactive(data, key, val) {
       // 当设置了新值，这个新值也要被observe
       childOb = observe(newVal)
       console.log(`您正在将${key}属性的值设置为：${newVal}`)
+      // 发布订阅模式，通知dep
+      dep.notify()
     }
   })
 }
